@@ -1,7 +1,5 @@
-
 import { errorMessage } from "../utils/utils.js";
 import { jwtVerifyService } from "./auth.service.js";
-
 
 let isError = function (e) {
   return e && e.stack && e.message;

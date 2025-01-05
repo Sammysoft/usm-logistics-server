@@ -6,7 +6,6 @@ import {
 } from "../../services/auth.service.js";
 import { authRegisterAccountService } from "../../services/auth.service.js";
 import bcrypt from "bcrypt";
-import { jwtService } from "../../services/auth.service.js";
 import { blockedUserService } from "../../services/middleware.service.js";
 
 import {
@@ -20,6 +19,7 @@ import {
   sendMailVerifiedService,
   verifyEmailService,
 } from "../../services/mailing.service.js";
+import { jwtService } from "../../services/auth.service.js";
 
 export const registerRequiredController = (req, res, next) => {
   const data = {
