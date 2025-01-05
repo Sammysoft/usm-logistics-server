@@ -9,7 +9,7 @@ import dbInit from "./utils/dbInit.js";
 import AccountRouter from "./routers/account.routes.js";
 
 const app = express();
-const port = process.env.PORT || 8089;
+const port = process.env.PORT || 1000;
 
 const corsOptions = {
   origin: "*",
@@ -44,7 +44,7 @@ app.use(
   })
 );
 
-app.listen(port, async () => {
+app.listen(port, "0.0.0.0", async () => {
   dbInit();
   console.log(`Server running on https://localhost:${port}`);
 });
