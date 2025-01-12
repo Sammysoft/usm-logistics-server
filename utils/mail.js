@@ -2,8 +2,7 @@ import dotenv from "dotenv";
 dotenv.config();
 const { STRIPE_RESP_URL_LOCAL } = process.env;
 
-
-export const resetPasswordTemplate = (userID) => {
+export const resetPasswordTemplate = (userID, otpCode) => {
   const emailTemplate = `
     <!DOCTYPE html>
     <html lang="en">
@@ -53,9 +52,9 @@ export const resetPasswordTemplate = (userID) => {
     <div class="container">
         <h1>USM Logistics LLC</h1>
         <p>Dear User,</p>
-        <p>We recieved a request on your account to reset your password,
-        please click on the link below to complete the password reset process</p>
-        <p><a href="${STRIPE_RESP_URL_LOCAL}/password/reset/${userID}" class="button">Reset Password</a></p>
+        <p>We recieved a request on your account to reset your password, please make sure that this code is not shared to anyone else under any circumstance.
+        Here is the One Time Pin to activate a new password reset</p>
+        <p>${otpCode}</p>
         <p>If you did not request for a reset kindly reach out to us and discard this mail. Thanks.</p>
         <p>Thank you for choosing USM Logistics LLC!</p>
         <p>Best regards, Head Admin</p>
@@ -243,7 +242,7 @@ export const orderCreatedEmailTemplate = (fullname, products) => {
             )
             .join("")}
         </table>
-        <h4>Thanks for shopping at 928Apparels.
+        <h4>Thanks for shopping at USM Logistics LLC.
       </body>
     </html>
   `;
@@ -251,7 +250,7 @@ export const orderCreatedEmailTemplate = (fullname, products) => {
   return emailTemplate;
 };
 
-export const emailVerificationTemplate = (fullName, userID) => {
+export const emailVerificationTemplate = (fullName, code) => {
   const emailTemplate = `
     <!DOCTYPE html>
     <html lang="en">
@@ -301,10 +300,10 @@ export const emailVerificationTemplate = (fullName, userID) => {
     <div class="container">
         <h1>USM Logistics LLC</h1>
         <p>Dear ${fullName},</p>
-        <p>Thank you for creating an account with 928Apparels. To complete your registration, please click the link below to verify your email address:</p>
-        <p><a href="${STRIPE_RESP_URL_LOCAL}/verify/${userID}" class="button">Verify Email</a></p>
-        <p>If you did not create an account, you can safely ignore this email.</p>
-        <p>Thank you for choosing 928Apparels!</p>
+        <p>Thank you for creating an account with USM Logistics LLC.</p>
+        <p>To verify your account you need to supply these OTP codes for account activation, please do not give out these codes for any reason under any circumstances.
+        <p><b>${code}</b></p>
+        <p>Thank you for choosing USM Logistics LLC!</p>
         <p>Best regards, Head Admin</p>
     </div>
     </body>
@@ -321,7 +320,7 @@ export const emailVerifiedTemplate = (fullName) => {
     <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome Onboard - 928Apparels</title>
+    <title>Welcome Onboard - USM Logistics LLC</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
@@ -364,9 +363,8 @@ export const emailVerifiedTemplate = (fullName) => {
     <div class="container">
         <h1>USM Logistics LLC</h1>
         <p>Dear ${fullName},</p>
-        <p>Your email address has been verified completely, you can proceed to sign in and continue with shoping</p>
-        <p><a href="${STRIPE_RESP_URL_LOCAL}/login" class="button">Sign In</a></p>
-        <p>Thank you for choosing 928Apparels!</p>
+        <p>Your email address has been verified completely, you can proceed to sign in and continue with our services.</p>
+        <p>Thank you for choosing USM Logistics LLC!</p>
         <p>Best regards, Head Admin</p>
     </div>
     </body>

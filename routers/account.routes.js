@@ -10,6 +10,7 @@ import {
   verifyEmailRequiredController,
   resetPasswordRequiredController,
   resetPasswordController,
+  ResendVerifyEmailController,
 } from "../controllers/Auth/auth.controller.js";
 import { authUserDetailsController } from "../controllers/Auth/auth.controller.get.js";
 import { userDetailsMiddleware } from "../services/admin.middleware.service.js";
@@ -24,16 +25,19 @@ AccountRouter.post(
 );
 AccountRouter.post("/auth", loginRequiredController, authLoginController);
 AccountRouter.get("/get", userDetailsMiddleware, authUserDetailsController);
-// AccountRouter.post(
-//   "/verify/:userID",
-//   verifyEmailRequiredController,
-//   VerifyEmailController
-// );
-// AccountRouter.post("/password/reset", forgetPasswordController);
-// AccountRouter.post(
-//   "/password/change",
-//   resetPasswordRequiredController,
-//   resetPasswordController
-// );
+AccountRouter.post(
+  "/verify",
+  verifyEmailRequiredController,
+  VerifyEmailController
+);
+AccountRouter.post('/verify/resend', ResendVerifyEmailController)
+AccountRouter.post("/password/request", forgetPasswordController);
+AccountRouter.post(
+  "/password/change/:userID",
+  resetPasswordRequiredController,
+  resetPasswordController
+);
+
+
 
 export default AccountRouter;

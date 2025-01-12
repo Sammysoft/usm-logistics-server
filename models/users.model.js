@@ -2,13 +2,8 @@ import mongoose from "mongoose";
 
 const userSchema = mongoose.Schema(
   {
-    fullName: { type: String, required: true },
     avatar: { type: String },
-    phoneNumber: {
-      countryCode: { type: String },
-      numberCode: { type: String, required: true },
-    },
-    account: { type: mongoose.Schema.Types.ObjectId, ref: "Account" },
+    account: { type: mongoose.Schema.Types.ObjectId, ref: "Accounts" },
     address: {
       label: { type: String },
       line1: { type: String },
@@ -18,7 +13,7 @@ const userSchema = mongoose.Schema(
       city: { type: String },
       zipCode: { type: String },
     },
-    cards: [{ type: mongoose.Schema.Types.ObjectId, ref: "Cards" }],
+    card: [{ type: mongoose.Schema.Types.ObjectId, ref: "Cards" }],
   },
   { timestamps: true }
 );

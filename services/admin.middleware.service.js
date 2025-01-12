@@ -19,7 +19,7 @@ export const userDetailsMiddleware = async (req, res, next) => {
     let jwtVerifier = await authMiddlewareService(header, res);
     if (!jwtVerifier) return;
     req.user = jwtVerifier.id;
-    req.userData = await findUserByService({ _id: jwtVerifier.id });
+    req.userData = await findUserByService({ account: jwtVerifier.id });
     return next();
   } catch (error) {
     console.log(error);

@@ -8,12 +8,13 @@ import {
   resetPasswordTemplate,
   subscriptionUpdatedEmailTemplate,
 } from "../utils/mail.js";
+import { AccountModel } from "../models/account.model.js";
 
 let transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: "samuelbibilade@gmail.com",
-    pass: "yklplzvhffxptqoq",
+    user: "usmlogisticsapp@gmail.com",
+    pass: "lheuyhkuqlqhxtcu",
   },
 });
 
@@ -93,7 +94,7 @@ export const sendMailVerificationService = (
   senderMail,
   recieverMail,
   fullName,
-  userID,
+  code,
   cb
 ) => {
   const mailOptions = {
@@ -101,7 +102,7 @@ export const sendMailVerificationService = (
     to: recieverMail,
     subject: "Email Verification",
     fullName: fullName,
-    html: emailVerificationTemplate(fullName, userID),
+    html: emailVerificationTemplate(fullName, code),
   };
 
   transporter.sendMail(mailOptions, function (err, data) {
@@ -115,13 +116,12 @@ export const sendMailVerificationService = (
 
 export const verifyEmailService = async (userID) => {
   try {
-    let user = await UserModel.findById(userID);
-
+    let user = await AccountModel.findById(userID);
     let verify = await sendMailVerificationService(
-      "samuelbibilade@gmail.com",
+      "usmlogisticsapp@gmail.com",
       user.email,
       user.fullName,
-      user._id,
+      user.otpCode,
       (err) => {
         if (err) {
           console.log(err);
@@ -131,7 +131,6 @@ export const verifyEmailService = async (userID) => {
         }
       }
     );
-    console.log(verify);
     return user.email;
   } catch (error) {
     console.log(error);
@@ -187,13 +186,14 @@ export const sendPasswordResetService = (
   senderMail,
   recieverMail,
   userID,
+  otpCode,
   cb
 ) => {
   const mailOptions = {
     from: senderMail,
     to: recieverMail,
     subject: "Password Reset",
-    html: resetPasswordTemplate(userID),
+    html: resetPasswordTemplate(userID, otpCode),
   };
 
   transporter.sendMail(mailOptions, function (err, data) {
@@ -205,13 +205,14 @@ export const sendPasswordResetService = (
   });
 };
 
-export const sendResetPasswordMailService = async (userID) => {
+export const sendResetPasswordMailService = async (userID, otpCode) => {
   try {
-    let user = await UserModel.findById(userID);
+    let user = await AccountModel.findById(userID);
     await sendPasswordResetService(
-      "samuelbibilade@gmail.com",
+      "usmlogisticsapp@gmail.com",
       user.email,
       user._id,
+      otpCode,
       (err) => {
         if (err) {
           console.log(err);
