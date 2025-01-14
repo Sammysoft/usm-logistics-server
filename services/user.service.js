@@ -1,8 +1,9 @@
 import { AccountModel } from "../models/account.model.js";
 import { UserModel } from "../models/users.model.js";
+import { CardModel } from "../models/cards.model.js";
 
 export const formatUserService = async (data) => {
-  console.log(data);
+  // console.log(data);
   const {
     phoneNumber,
     fullName,
@@ -12,6 +13,7 @@ export const formatUserService = async (data) => {
     createdAt,
     avatar,
     address,
+    cards,
     ...others
   } = data;
 
@@ -20,14 +22,22 @@ export const formatUserService = async (data) => {
     profile: {
       phone: account?.phoneNumber
         ? {
-            countryCode: account?.phoneNumber.countryCode,
-            numberCode: account?.phoneNumber.numberCode,
+            countryCode: account?.phoneNumber.countryCode || "",
+            numberCode: account?.phoneNumber.numberCode || "",
           }
         : null,
       fullName: account?.fullName ? account?.fullName : null,
       email: account?.email ? account.email : null,
       avatar: avatar ? avatar : null,
     },
+    cards: Array.isArray(cards)
+      ? cards.map((items) => ({
+          cardName: items.cardName || null,
+          cardNumber: items.cardNumber || null,
+          expiryDate: items.expiryDate || null,
+          cvv: items.cvv || null,
+        }))
+      : [],
     address: address ? address : null,
     isAdmin: account?.isAdmin ? account?.isAdmin : false,
     isBlocked: account?.isBlocked ? account?.isBlocked : null,
@@ -37,9 +47,7 @@ export const formatUserService = async (data) => {
 
 export const findUserByService = async (data) => {
   try {
-    let user = await UserModel.findOne(data)
-      .populate(["account"])
-      // .populate(["cards"]);
+    let user = await UserModel.findOne(data).populate(["account", "cards"]);
 
     if (!user) return errorMessage(400, "User account not Found")(res);
     if (user) return formatUserService(user);
@@ -128,6 +136,52 @@ export const addLocationToProfileService = async (data, accountID) => {
     ).populate([{ path: "profile", model: "Users" }]);
 
     return updatedAccount;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+};
+
+export const editProfileService = async (userID, data, req) => {
+  try {
+    await AccountModel.findByIdAndUpdate(
+      req.userData,
+      { $set: { address: data.address } },
+      { new: true }
+    );
+
+    let userAccount = await UserModel.findByIdAndUpdate(
+      userID,
+      { $set: { fullName: data.fullName } },
+      { new: true }
+    ).populate(["account", "cards"]);
+
+    return formatUserService(userAccount);
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+};
+
+export const addCardToProfileService = async (data, userID) => {
+  try {
+    let card = new CardModel();
+    card.cvv = data.cvv;
+    card.cardNumber = data.cardNumber;
+    card.cardName = data.cardName;
+    card.expiryDate = data.expiryDate;
+    card.user = userID;
+    await card.save();
+    let updatedUser = await UserModel.findByIdAndUpdate(
+      userID,
+      {
+        $push: { cards: card._id },
+      },
+      { new: true }
+    );
+
+    let formatedUpdatedUser = await formatUserService(updatedUser);
+    return formatedUpdatedUser;
   } catch (error) {
     console.log(error);
     return false;

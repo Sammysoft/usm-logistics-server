@@ -13,7 +13,7 @@ const userSchema = mongoose.Schema(
       city: { type: String },
       zipCode: { type: String },
     },
-    card: [{ type: mongoose.Schema.Types.ObjectId, ref: "Cards" }],
+    cards: [{ type: mongoose.Schema.Types.ObjectId, ref: "Cards" }],
   },
   { timestamps: true }
 );

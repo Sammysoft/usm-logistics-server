@@ -32,3 +32,22 @@ export const addLocationToProfileController = async (req, res, next) => {
   if (!updatedAccount)
     return errorMessage(400, "Internal Server Error 😢")(res);
 };
+
+export const addCardsRequiredController = async (req, res, next) => {
+  const card = req.body;
+  const data = {
+    cvv: card.cvv,
+    expDate: card.expDate,
+    cardName: card.cardName,
+    cardNumber: card.cardNumber,
+  };
+
+  if (!isRequired(data, res)) return;
+  return next();
+};
+
+export const addCardsToProfileController = async (req, res, next) => {
+  const { cvv, cardName, cardNumber, expDate } = req.body;
+
+  
+};

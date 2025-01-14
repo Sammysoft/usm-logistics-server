@@ -135,7 +135,7 @@ export const resendVerificationEmailService = async (req, res) => {
 };
 
 export const resetPasswordService = async (userID, data) => {
-  console.log(data)
+  // console.log(data)
   try {
     let user = await AccountModel.findById(userID);
     let salt = await bcrypt.genSalt(10);

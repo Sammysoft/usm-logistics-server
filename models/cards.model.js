@@ -6,6 +6,11 @@ const cardSchema = mongoose.Schema(
     cardNumber: { type: Number, required: true },
     expiryDate: { type: String, required: true },
     cvv: { type: String, required: true },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Users",
+      required: true,
+    },
   },
   { timestamps: true }
 );

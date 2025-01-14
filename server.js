@@ -5,6 +5,7 @@ import helmet from "helmet";
 import winston from "winston";
 import morgan from "morgan";
 import dbInit from "./utils/dbInit.js";
+import mongoose from 'mongoose'
 
 import AccountRouter from "./routers/account.routes.js";
 import UserRouter from "./routers/user.routes.js";
@@ -45,8 +46,11 @@ app.use(
   })
 );
 
+
+
 app.listen(port, "0.0.0.0", async () => {
   dbInit();
+  // console.log(mongoose.modelNames())
   console.log(`Server running on https://localhost:${port}`);
 });
 
