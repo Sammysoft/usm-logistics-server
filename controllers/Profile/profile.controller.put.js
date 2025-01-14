@@ -18,16 +18,20 @@ export const editProfileRequiredController = async (req, res, next) => {
 
 export const editProfileController = async (req, res) => {
   let updatedUser = await editProfileService(req.params.userID, req.body, req);
+  // console.log(updatedUser);
   if (updatedUser)
     return successMessage(200, "Update Successful 👍🏼", updatedUser)(res);
   if (!updatedUser) return errorMessage(400, "Update Failed 😢", null)(res);
 };
 
 export const addCardToProfileRequiredController = async (req, res, next) => {
+  const card = req.body;
   const data = {
-    address: req.body.address,
+    cvv: card.cvv,
     userID: req.params.userID,
-    fullName: req.body.fullName,
+    cardName: card.cardName,
+    cardNumber: card.cardNumber,
+    expiryDate: card.expiryDate,
   };
 
   if (!isRequired(data, res)) return;
@@ -35,6 +39,7 @@ export const addCardToProfileRequiredController = async (req, res, next) => {
 };
 
 export const addCardToProfileController = async (req, res) => {
+  // console.log(req.body);
   const data = req.body;
   const userID = req.params.userID;
   let updatedUser = await addCardToProfileService(data, userID);

@@ -1,6 +1,7 @@
 import { AccountModel } from "../models/account.model.js";
 import { UserModel } from "../models/users.model.js";
 import { CardModel } from "../models/cards.model.js";
+import { errorMessage } from "../utils/utils.js";
 
 export const formatUserService = async (data) => {
   // console.log(data);
@@ -17,6 +18,8 @@ export const formatUserService = async (data) => {
     ...others
   } = data;
 
+  // console.log(cards);
+
   return {
     id: _id,
     profile: {
@@ -32,10 +35,11 @@ export const formatUserService = async (data) => {
     },
     cards: Array.isArray(cards)
       ? cards.map((items) => ({
-          cardName: items.cardName || null,
-          cardNumber: items.cardNumber || null,
-          expiryDate: items.expiryDate || null,
-          cvv: items.cvv || null,
+          cardName: items?.cardName || null,
+          cardNumber: items?.cardNumber || null,
+          expiryDate: items?.expiryDate || null,
+          cvv: items?.cvv || null,
+          default: items.defaultCard || false
         }))
       : [],
     address: address ? address : null,
@@ -45,7 +49,7 @@ export const formatUserService = async (data) => {
   };
 };
 
-export const findUserByService = async (data) => {
+export const findUserByService = async (data, res) => {
   try {
     let user = await UserModel.findOne(data).populate(["account", "cards"]);
 
@@ -143,16 +147,17 @@ export const addLocationToProfileService = async (data, accountID) => {
 };
 
 export const editProfileService = async (userID, data, req) => {
+  // console.log(req.user);
   try {
     await AccountModel.findByIdAndUpdate(
-      req.userData,
-      { $set: { address: data.address } },
+      req.user,
+      { $set: { fullName: data.fullName } },
       { new: true }
     );
 
     let userAccount = await UserModel.findByIdAndUpdate(
       userID,
-      { $set: { fullName: data.fullName } },
+      { $set: { address: data.address } },
       { new: true }
     ).populate(["account", "cards"]);
 
@@ -164,12 +169,9 @@ export const editProfileService = async (userID, data, req) => {
 };
 
 export const addCardToProfileService = async (data, userID) => {
+  // console.log(data);
   try {
-    let card = new CardModel();
-    card.cvv = data.cvv;
-    card.cardNumber = data.cardNumber;
-    card.cardName = data.cardName;
-    card.expiryDate = data.expiryDate;
+    let card = new CardModel(data);
     card.user = userID;
     await card.save();
     let updatedUser = await UserModel.findByIdAndUpdate(
@@ -178,7 +180,7 @@ export const addCardToProfileService = async (data, userID) => {
         $push: { cards: card._id },
       },
       { new: true }
-    );
+    ).populate(["account", "cards"]);
 
     let formatedUpdatedUser = await formatUserService(updatedUser);
     return formatedUpdatedUser;

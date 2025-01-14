@@ -9,6 +9,6 @@ export const userMiddleware = async (req, res, next) => {
   if (jwtVerifier.isAdmin === true)
     return errorMessage(401, "Authorization Denied")(res);
   req.user = jwtVerifier.id;
-  req.userData = await findUserByService({ account: jwtVerifier.id });
+  req.userData = await findUserByService({ account: jwtVerifier.id }, res);
   return next();
 };

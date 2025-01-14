@@ -28,7 +28,7 @@ export const getUserByEmailService = async (email, res, bool = false) => {
     let user = await AccountModel.findOne({ email });
     if (!bool && !user) return errorMessage(400, "Invalid Credentials")(res);
     if (user.isVerified !== true) {
-      console.log(user);
+      // console.log(user);
       await sendMailVerificationService(
         "usmlogisticsapp@gmail.com",
         user.email,
