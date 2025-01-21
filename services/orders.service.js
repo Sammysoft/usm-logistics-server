@@ -1,7 +1,8 @@
 import { OrderModel } from "../models/order.model.js";
 import { UserModel } from "../models/users.model.js";
-import { QuoteModel } from "../models/Quotes.model.js";
+import { QuoteModel } from "../models/quote.model.js";
 import { formatUserService } from "./user.service.js";
+
 
 export const createOrderService = async (data, userID, req) => {
   try {
