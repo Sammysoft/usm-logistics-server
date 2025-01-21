@@ -12,4 +12,6 @@ const quoteSchema = mongoose.Schema(
   { timestamps: true }
 );
 
+
+
 export const QuoteModel = mongoose.model("Quotes", quoteSchema);
