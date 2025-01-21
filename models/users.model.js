@@ -14,6 +14,7 @@ const userSchema = mongoose.Schema(
       zipCode: { type: String },
     },
     cards: [{ type: mongoose.Schema.Types.ObjectId, ref: "Cards" }],
+    orders: [{ type: mongoose.Schema.Types.ObjectId, ref: "Orders" }],
   },
   { timestamps: true }
 );

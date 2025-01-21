@@ -15,6 +15,7 @@ export const formatUserService = async (data) => {
     avatar,
     address,
     cards,
+    orders,
     ...others
   } = data;
 
@@ -32,6 +33,7 @@ export const formatUserService = async (data) => {
       fullName: account?.fullName ? account?.fullName : null,
       email: account?.email ? account.email : null,
       avatar: avatar ? avatar : null,
+      id: account?._id ? account?._id : null,
     },
     cards: Array.isArray(cards)
       ? cards.map((items) => ({
@@ -39,7 +41,42 @@ export const formatUserService = async (data) => {
           cardNumber: items?.cardNumber || null,
           expiryDate: items?.expiryDate || null,
           cvv: items?.cvv || null,
-          default: items.defaultCard || false
+          default: items.defaultCard || false,
+        }))
+      : [],
+    orders: Array.isArray(orders)
+      ? orders.map((items) => ({
+          sender: items?.sender
+            ? {
+                phone: items?.sender?.phone,
+                name: items?.sender?.name,
+                address: items?.sender?.address,
+                home: items?.sender?.home,
+              }
+            : {},
+          reciever: items?.reciever
+            ? {
+                name: items?.reciever?.name,
+                phone: items?.reciever.phone,
+                address: items?.reciever.address,
+                zipCode: items?.reciever?.zipCode,
+                country: items?.reciever.country,
+                pickCenter: items.reciever.pickCenter,
+                paymentMethod: items.reciever.paymentMethod,
+              }
+            : {},
+          package: items.package
+            ? {
+                trackingID: items.package.trackingID,
+                orderType: items.package.orderType,
+                name: items?.package?.name,
+                weight: items?.package?.weight,
+                box: items?.package.box,
+                packageType: items.package.packageType,
+                condition: items.package.condition,
+              }
+            : {},
+          quote:{}
         }))
       : [],
     address: address ? address : null,
@@ -157,7 +194,7 @@ export const editProfileService = async (userID, data, req) => {
 
     let userAccount = await UserModel.findByIdAndUpdate(
       userID,
-      { $set: { address: data.address } },
+      { $set: { address: data.address, avatar: data.avatar } },
       { new: true }
     ).populate(["account", "cards"]);
 

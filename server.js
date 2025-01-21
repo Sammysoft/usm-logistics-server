@@ -5,10 +5,12 @@ import helmet from "helmet";
 import winston from "winston";
 import morgan from "morgan";
 import dbInit from "./utils/dbInit.js";
-import mongoose from 'mongoose'
+
 
 import AccountRouter from "./routers/account.routes.js";
 import UserRouter from "./routers/user.routes.js";
+import QuoteRouter from "./routers/quotes.routes.js";
+import OrderRouter from "./routers/orders.routes.js";
 
 const app = express();
 const port = process.env.PORT || 1000;
@@ -56,3 +58,5 @@ app.listen(port, "0.0.0.0", async () => {
 
 app.use("/api/v1/", AccountRouter);
 app.use("/api/v1/user/", UserRouter);
+app.use('/api/v1/order/', OrderRouter);
+app.use('/api/v1/quote/', QuoteRouter);

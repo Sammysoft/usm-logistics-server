@@ -6,10 +6,11 @@ import { isRequired } from "../../utils/required.js";
 import { errorMessage, successMessage } from "../../utils/utils.js";
 
 export const editProfileRequiredController = async (req, res, next) => {
-  const { fullName, address } = req.body;
+  const { fullName, address, avatar } = req.body;
   const data = {
     fullName,
     address,
+    avatar,
   };
 
   if (!isRequired(data, res)) return;
