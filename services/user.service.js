@@ -65,15 +65,15 @@ export const formatUserService = async (data) => {
                 paymentMethod: items.reciever.paymentMethod,
               }
             : {},
-          package: items.package
+          package: items._package
             ? {
-                trackingID: items.package.trackingID,
-                orderType: items.package.orderType,
-                name: items?.package?.name,
-                weight: items?.package?.weight,
-                box: items?.package.box,
-                packageType: items.package.packageType,
-                condition: items.package.condition,
+                trackingID: items._package.trackingID,
+                orderType: items._package.orderType,
+                name: items?._package?.name,
+                weight: items?._package?.weight,
+                box: items?._package.box,
+                packageType: items._package.packageType,
+                condition: items._package.condition,
               }
             : {},
           quote:{}
