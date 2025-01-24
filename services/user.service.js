@@ -76,7 +76,9 @@ export const formatUserService = async (data) => {
                 condition: items._package.condition,
               }
             : {},
-          quote:{}
+          quote: {},
+          paymentStatus: items.paymentStatus || null,
+          deliveryStatus: items.deliveryStatus || null,
         }))
       : [],
     address: address ? address : null,
@@ -88,7 +90,11 @@ export const formatUserService = async (data) => {
 
 export const findUserByService = async (data, res) => {
   try {
-    let user = await UserModel.findOne(data).populate(["account", "cards"]);
+    let user = await UserModel.findOne(data).populate([
+      "account",
+      "cards",
+      "orders",
+    ]);
 
     if (!user) return errorMessage(400, "User account not Found")(res);
     if (user) return formatUserService(user);

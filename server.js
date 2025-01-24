@@ -11,6 +11,7 @@ import AccountRouter from "./routers/account.routes.js";
 import UserRouter from "./routers/user.routes.js";
 import QuoteRouter from "./routers/quotes.routes.js";
 import OrderRouter from "./routers/orders.routes.js";
+import TrackRouter from "./routers/track.routes.js";
 
 const app = express();
 const port = process.env.PORT || 1000;
@@ -60,3 +61,4 @@ app.use("/api/v1/", AccountRouter);
 app.use("/api/v1/user/", UserRouter);
 app.use('/api/v1/order/', OrderRouter);
 app.use('/api/v1/quote/', QuoteRouter);
+app.use('/api/v1/track/', TrackRouter);
