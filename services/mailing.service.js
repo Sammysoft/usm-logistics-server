@@ -1,5 +1,5 @@
 import nodemailer from "nodemailer";
-import { UserModel } from "../models/users.model.js";
+
 import {
   emailVerificationTemplate,
   emailVerifiedTemplate,

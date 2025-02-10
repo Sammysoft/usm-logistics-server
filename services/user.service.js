@@ -104,6 +104,18 @@ export const findUserByService = async (data, res) => {
   }
 };
 
+export const findAdminByService = async (data, res) => {
+  try {
+    let user = await AccountModel.findOne(data);
+    if (!user) return errorMessage(400, "User account not Found")(res);
+    if (user) return user;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+};
+
+
 export const deleteUserService = async (userID) => {
   try {
     let user = await UserModel.findByIdAndDelete(userID);

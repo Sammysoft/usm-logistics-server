@@ -22,7 +22,6 @@ import {
   verifyEmailService,
 } from "../../services/mailing.service.js";
 import { jwtService } from "../../services/auth.service.js";
-import { AccountModel } from "../../models/account.model.js";
 
 export const registerRequiredController = (req, res, next) => {
   const data = {

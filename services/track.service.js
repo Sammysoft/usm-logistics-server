@@ -1,3 +1,4 @@
+import { OrderModel } from "../models/order.model.js";
 import { TrackModel } from "../models/track.model.js";
 
 export const getTrackPackageService = async (query) => {
@@ -22,6 +23,12 @@ export const createTrackPackageService = async (trackingID, req) => {
     trackPackage.order = req.params.orderID;
     trackPackage.driver = req.params.driverID;
     await trackPackage.save();
+
+    await OrderModel.findByIdAndUpdate(
+      req.params.orderID,
+      { $set: { track: trackPackage._id } },
+      { new: true }
+    );
 
     return trackPackage;
   } catch (error) {

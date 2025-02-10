@@ -1,6 +1,6 @@
 import { errorMessage } from "../utils/utils.js";
 import { authMiddlewareService } from "./middleware.service.js";
-import { findUserByService } from "./user.service.js";
+import { findAdminByService, findUserByService } from "./user.service.js";
 
 export const adminMiddleware = async (req, res, next) => {
   let header = req.headers.authorization;
@@ -9,7 +9,7 @@ export const adminMiddleware = async (req, res, next) => {
   if (jwtVerifier.isAdmin === false)
     return errorMessage(401, "Authorization Denied")(res);
   req.user = jwtVerifier.id;
-  req.userData = await findUserByService({ _id: jwtVerifier.id });
+  req.userData = await findAdminByService({ _id: jwtVerifier.id });
   return next();
 };
 

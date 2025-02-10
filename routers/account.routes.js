@@ -13,7 +13,10 @@ import {
   ResendVerifyEmailController,
 } from "../controllers/Auth/auth.controller.js";
 import { authUserDetailsController } from "../controllers/Auth/auth.controller.get.js";
-import { userDetailsMiddleware } from "../services/admin.middleware.service.js";
+import {
+  adminMiddleware,
+  userDetailsMiddleware,
+} from "../services/admin.middleware.service.js";
 
 const AccountRouter = express.Router();
 
@@ -25,19 +28,18 @@ AccountRouter.post(
 );
 AccountRouter.post("/auth", loginRequiredController, authLoginController);
 AccountRouter.get("/get", userDetailsMiddleware, authUserDetailsController);
+AccountRouter.get("/get/admin", adminMiddleware, authUserDetailsController);
 AccountRouter.post(
   "/verify",
   verifyEmailRequiredController,
   VerifyEmailController
 );
-AccountRouter.post('/verify/resend', ResendVerifyEmailController)
+AccountRouter.post("/verify/resend", ResendVerifyEmailController);
 AccountRouter.post("/password/request", forgetPasswordController);
 AccountRouter.post(
   "/password/change/:userID",
   resetPasswordRequiredController,
   resetPasswordController
 );
-
-
 
 export default AccountRouter;

@@ -51,6 +51,10 @@ const orderSchema = mongoose.Schema(
       type: String,
       default: "Pending",
     },
+    courier: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Tracks",
+    },
   },
   { timestamps: true }
 );
