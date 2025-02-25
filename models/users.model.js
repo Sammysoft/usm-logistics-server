@@ -4,6 +4,7 @@ const userSchema = mongoose.Schema(
   {
     avatar: { type: String },
     account: { type: mongoose.Schema.Types.ObjectId, ref: "Accounts" },
+    driver: { type: mongoose.Schema.Types.ObjectId, ref: "Drivers" },
     address: {
       label: { type: String },
       line1: { type: String },

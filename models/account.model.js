@@ -1,6 +1,6 @@
-import mongoose from "mongoose";
+import { model, Schema } from "mongoose";
 
-const accountSchema = mongoose.Schema(
+const accountSchema = Schema(
   {
     fullName: { type: String, required: true },
     password: { type: String, required: true },
@@ -9,7 +9,7 @@ const accountSchema = mongoose.Schema(
       countryCode: { type: String },
       numberCode: { type: String, required: true },
     },
-    profile: { type: mongoose.Schema.Types.ObjectId, ref: "Users" },
+    profile: { type: Schema.Types.ObjectId, ref: "Users" },
     isAdmin: { type: Boolean, default: false },
     isBlocked: { type: Boolean, default: false },
     isVerified: { type: Boolean, default: false },
@@ -48,4 +48,4 @@ accountSchema.methods.updateOtpIfExpired = async function () {
   }
 };
 
-export const AccountModel = mongoose.model("Accounts", accountSchema);
+export const AccountModel = model("Accounts", accountSchema);

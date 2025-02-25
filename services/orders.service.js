@@ -3,8 +3,9 @@ import { UserModel } from "../models/users.model.js";
 import { QuoteModel } from "../models/quote.model.js";
 import { formatUserService } from "./user.service.js";
 
-
 export const createOrderService = async (data, userID, req) => {
+  console.log(req.userData.id, req.query.admin);
+
   try {
     const { shippingCost, totalCost, expressFee, ...rest } = data;
 
@@ -30,17 +31,53 @@ export const createOrderService = async (data, userID, req) => {
       { new: true }
     );
 
-    let user = await UserModel.findByIdAndUpdate(
-      userID,
-      {
-        $push: { orders: order._id },
-      },
-      { new: true }
-    ).populate(["cards", "account", "orders"]);
+    let user = req.query.admin
+      ? order
+      : await UserModel.findByIdAndUpdate(
+          userID,
+          {
+            $push: { orders: order._id },
+          },
+          { new: true }
+        ).populate(["cards", "account", "orders"]);
 
-    let formattedUser = formatUserService(user);
+    let formattedUser = req.query.admin ? user : formatUserService(user);
     return formattedUser;
   } catch (error) {
+    console.log(error);
+    return false;
+  }
+};
+
+export const getAllOrdersService = async (query = {}) => {
+  try {
+    const orders = await OrderModel.find(query)
+      .populate({ path: "quote", select: "cost charges express shipping" })
+      .populate({
+        path: "user",
+        select: "avatar",
+        populate: { path: "account", select: "fullName email phoneNumber" },
+      })
+      .populate({
+        path: "courier",
+        select: "driver user",
+        populate: [
+          {
+            path: "driver.details",
+            select: "account",
+            populate: { path: "account", select: "fullName phoneNumber email" },
+          },
+          {
+            path: "user",
+            select: "account",
+            populate: { path: "account", select: "fullName phoneNumber email" },
+          },
+        ],
+      });
+
+    return orders;
+  } catch (error) {
+    console.log(error);
     return false;
   }
 };

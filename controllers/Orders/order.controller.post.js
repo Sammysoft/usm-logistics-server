@@ -22,6 +22,7 @@ export const createOrderController = async (req, res) => {
   const userID = req.userData.id;
 
   let updatedUserData = await createOrderService(data, userID, req);
+  // console.log(updatedUserData)
   if (updatedUserData)
     return successMessage(200, "Order created", updatedUserData)(res);
   if (!updatedUserData)

@@ -6,7 +6,7 @@ import { errorMessage } from "../utils/utils.js";
 export const formatUserService = async (data) => {
   // console.log(data);
   const {
-    phoneNumber,
+    phoneNumber = null,
     fullName,
     _id,
     _v,
@@ -16,6 +16,7 @@ export const formatUserService = async (data) => {
     address,
     cards,
     orders,
+    driver,
     ...others
   } = data;
 
@@ -34,6 +35,13 @@ export const formatUserService = async (data) => {
       email: account?.email ? account.email : null,
       avatar: avatar ? avatar : null,
       id: account?._id ? account?._id : null,
+      drive: driver
+        ? {
+            documents: driver.documents || "",
+            isActive: driver.isActive || false,
+            isVerified: driver.isVerified || false,
+          }
+        : null,
     },
     cards: Array.isArray(cards)
       ? cards.map((items) => ({
@@ -115,7 +123,6 @@ export const findAdminByService = async (data, res) => {
   }
 };
 
-
 export const deleteUserService = async (userID) => {
   try {
     let user = await UserModel.findByIdAndDelete(userID);
@@ -165,7 +172,11 @@ export const getAllUsersService = async (req, res) => {
 
 export const getUserByService = async (query) => {
   try {
-    let user = await UserModel.findOne(query).populate(["account", "cards"]);
+    let user = await UserModel.findOne(query).populate([
+      "account",
+      "cards",
+      "driver",
+    ]);
     return user;
   } catch (error) {
     return false;
@@ -214,7 +225,7 @@ export const editProfileService = async (userID, data, req) => {
       userID,
       { $set: { address: data.address, avatar: data.avatar } },
       { new: true }
-    ).populate(["account", "cards"]);
+    ).populate(["account", "cards", "driver"]);
 
     return formatUserService(userAccount);
   } catch (error) {
@@ -235,7 +246,7 @@ export const addCardToProfileService = async (data, userID) => {
         $push: { cards: card._id },
       },
       { new: true }
-    ).populate(["account", "cards"]);
+    ).populate(["account", "cards", "driver"]);
 
     let formatedUpdatedUser = await formatUserService(updatedUser);
     return formatedUpdatedUser;

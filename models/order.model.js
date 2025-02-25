@@ -15,6 +15,7 @@ const orderSchema = mongoose.Schema(
       zipCode: { type: String },
       country: { type: String },
       pickCenter: { type: String },
+      pickUpDate: { type: String },
       paymentMethod: {
         type: String,
         enum: ["online", "cash"],
