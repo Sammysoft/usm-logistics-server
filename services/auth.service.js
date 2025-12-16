@@ -8,7 +8,7 @@ import jwt from "jsonwebtoken";
 import {
   sendMailVerificationService,
   sendResetPasswordMailService,
-} from "./mailing.service.js";
+} from "./email.service.js";
 
 dotenv.config();
 const SECRET_KEY = process.env.SECRET_KEY;

@@ -20,7 +20,7 @@ import {
   sendMailVerificationService,
   sendMailVerifiedService,
   verifyEmailService,
-} from "../../services/mailing.service.js";
+} from "../../services/email.service.js";
 import { jwtService } from "../../services/auth.service.js";
 
 export const registerRequiredController = (req, res, next) => {
@@ -136,10 +136,10 @@ export const ResendVerifyEmailController = async (req, res) => {
   let verify = await resendVerificationEmailService(req, res);
   if (verify) {
     await sendMailVerificationService(
-      "usmlogisticsapp@gmail.com",
       verify.email,
       verify.fullName,
-      verify.otpCode
+      verify.otpCode,
+      () => {}
     );
     return successMessage(
       200,
