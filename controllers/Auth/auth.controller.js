@@ -111,18 +111,13 @@ export const verifyEmailRequiredController = async (req, res, next) => {
 
 export const VerifyEmailController = async (req, res) => {
   let verified = await verifiedEmailService(req, res);
-  await sendMailVerifiedService(
-    "usmlogisticsapp@gmail.com",
-    verified.email,
-    verified.fullName,
-    (err) => {
-      if (err) {
-        console.log("Mail not sent");
-      } else {
-        console.log("Mail sent");
-      }
+  await sendMailVerifiedService(verified.email, verified.fullName, (err) => {
+    if (err) {
+      console.log("Mail not sent");
+    } else {
+      console.log("Mail sent");
     }
-  );
+  });
 
   if (verified)
     return successMessage(200, "User Email Verified 👍", {
@@ -139,7 +134,13 @@ export const ResendVerifyEmailController = async (req, res) => {
       verify.email,
       verify.fullName,
       verify.otpCode,
-      () => {}
+      (err) => {
+        if (err) {
+          console.log("Mail not sent");
+        } else {
+          console.log("Mail sent");
+        }
+      }
     );
     return successMessage(
       200,

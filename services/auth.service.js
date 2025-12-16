@@ -8,6 +8,7 @@ import jwt from "jsonwebtoken";
 import {
   sendMailVerificationService,
   sendResetPasswordMailService,
+  verifyEmailService,
 } from "./email.service.js";
 
 dotenv.config();
@@ -29,12 +30,12 @@ export const getUserByEmailService = async (email, res, bool = false) => {
     if (!bool && !user) return errorMessage(400, "Invalid Credentials")(res);
     if (user.isVerified !== true) {
       // console.log(user);
-      await sendMailVerificationService(
-        "usmlogisticsapp@gmail.com",
-        user.email,
-        user.fullName,
-        user._id
-      );
+      await verifyEmailService(user._id)
+      // await sendMailVerificationService(
+      //   user.email,
+      //   user.fullName,
+      //   user._id
+      // );
       return errorMessage(
         400,
         `Email Not Verified, check your mail @${user.email} to verify account`,
